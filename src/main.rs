@@ -1,8 +1,9 @@
 use std::{
-    fs::{File, OpenOptions},
+    fs::OpenOptions,
     io::{self, Write},
 };
 
+use byteorder::{BigEndian, WriteBytesExt};
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -20,8 +21,12 @@ fn main() -> io::Result<()> {
         .write(true)
         .open(args.blender_input_fifo)?;
 
-    println!("writing");
-    fifo.write(b"Hello from rust")?;
+    let test = 42.69;
+
+    let mut wrt = Vec::new();
+    wrt.write_f32::<BigEndian>(test)?;
+
+    fifo.write(&wrt)?;
     fifo.flush()?;
 
     Ok(())

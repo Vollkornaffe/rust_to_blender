@@ -2,14 +2,15 @@ import bpy
 import os
 import errno
 import stat
+import struct
+
+FIFO = 'blender_input'
 
 for handler in bpy.app.handlers.frame_change_pre:
     if handler.__name__ != 'update_geometry_from_pipe_input':
         continue
     print("removing", handler)
     bpy.app.handlers.frame_change_pre.remove(handler)
-
-FIFO = 'blender_input'
 
 print('Opening named pipe:', FIFO)
 fifo = os.open(FIFO, os.O_RDONLY | os.O_NONBLOCK)
@@ -27,10 +28,8 @@ def update_geometry_from_pipe_input(scene):
     
     n = len(buffer)
     
-    
-                
     if buffer:
         print("received something:", buffer, len(buffer))
-
+        print(struct.unpack('>f', buffer))
 
 bpy.app.handlers.frame_change_pre.append(update_geometry_from_pipe_input)
