@@ -30,6 +30,6 @@ def update_geometry_from_pipe_input(scene):
     
     if buffer:
         print("received something:", buffer, len(buffer))
-        print(struct.unpack('>f', buffer))
+        print(struct.unpack('f', buffer))
 
 bpy.app.handlers.frame_change_pre.append(update_geometry_from_pipe_input)

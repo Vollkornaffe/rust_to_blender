@@ -3,7 +3,7 @@ use std::{
     io::{self, Write},
 };
 
-use byteorder::{BigEndian, WriteBytesExt};
+use byteorder::{NativeEndian, WriteBytesExt};
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -24,7 +24,7 @@ fn main() -> io::Result<()> {
     let test = 42.69;
 
     let mut wrt = Vec::new();
-    wrt.write_f32::<BigEndian>(test)?;
+    wrt.write_f32::<NativeEndian>(test)?;
 
     fifo.write(&wrt)?;
     fifo.flush()?;
